@@ -324,3 +324,19 @@ npm run dev       # dev server with preview app
 npm run package   # build dist + run publint
 npm run check     # type check
 ```
+
+### Keeping `dist/` in sync
+
+Because bun doesn't run `prepare` scripts for git-installed packages, the built `dist/` directory is committed to the repo. A local **pre-commit hook** rebuilds it automatically before every commit:
+
+```sh
+# .git/hooks/pre-commit
+npm run prepare && git add dist/
+```
+
+If you clone fresh and the hook is missing, recreate it:
+
+```sh
+printf '#!/bin/sh\nnpm run prepare && git add dist/\n' > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
