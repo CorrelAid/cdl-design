@@ -179,23 +179,20 @@ Or simply set the variables if your element already matches one of the typograph
 
 ```svelte
 <script>
-  import { Button, Card } from '@correlaid/cdl-design';
+  import { Button, Card, Tabs, XlsFormDisplay, DdiDisplay } from '@correlaid/cdl-design';
 </script>
-
-<Card active>
-  <h2>Title</h2>
-  <p>Content</p>
-</Card>
-
-<Button variant="primary">Click</Button>
-<Button variant="secondary" size="lg">Secondary</Button>
-<Button variant="ghost" size="sm">Ghost</Button>
 ```
 
 #### Button
 
+```svelte
+<Button variant="primary">Click</Button>
+<Button variant="secondary" size="lg">Secondary</Button>
+<Button variant="ghost" size="sm" disabled>Ghost</Button>
+```
+
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
+|---|---|---|---|
 | `variant` | `'primary' \| 'secondary' \| 'ghost'` | `'primary'` | Visual style |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size |
 
@@ -203,11 +200,84 @@ Also accepts all standard `<button>` attributes.
 
 #### Card
 
+```svelte
+<Card active>
+  <h2>Title</h2>
+  <p>Content</p>
+</Card>
+```
+
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
+|---|---|---|---|
 | `id` | `string` | — | Element ID |
 | `active` | `boolean` | `false` | Active state with inset shadow |
 | `className` | `string` | `''` | Additional CSS classes |
+
+#### Tabs
+
+Collapsible tabbed content panel. Content is passed as HTML strings.
+
+```svelte
+<Tabs tabs={[
+  { title: 'Overview', content: '<p>First tab</p>' },
+  { title: 'Details', content: '<p>Second tab</p>' }
+]} />
+```
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `tabs` | `{ title: string; content: string }[]` | required | Tab definitions |
+| `activeTab` | `number` | `0` | Initially active tab index |
+| `expandLabel` | `string` | `'Show more'` | Expand button text |
+| `collapseLabel` | `string` | `'Show less'` | Collapse button text |
+
+If the active tab's content is taller than the first tab, an expand/collapse button appears automatically.
+
+#### XlsFormDisplay
+
+Renders XLSForm worksheets as tables, each sheet in its own card with a copy-to-clipboard button (copies as TSV).
+
+```svelte
+<!-- From survey/choices arrays -->
+<XlsFormDisplay
+  survey={[
+    { type: 'text', name: 'name', 'label::en': 'Your name?' },
+    { type: 'integer', name: 'age', 'label::en': 'Your age?' }
+  ]}
+  choices={[
+    { list_name: 'yes_no', name: 'yes', 'label::en': 'Yes' },
+    { list_name: 'yes_no', name: 'no', 'label::en': 'No' }
+  ]}
+/>
+
+<!-- Or from pre-built worksheets -->
+<XlsFormDisplay worksheets={[
+  { title: 'survey', headers: ['type', 'name'], data: [['text', 'q1']] }
+]} />
+```
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `worksheets` | `Worksheet[]` | — | Pre-built sheet data |
+| `survey` | `Record<string, string>[]` | — | Survey rows (auto-converted) |
+| `choices` | `Record<string, string>[]` | — | Choice rows (auto-converted) |
+
+Pass either `worksheets` or `survey`/`choices` — not both.
+
+#### DdiDisplay
+
+Displays DDI XML with Shiki syntax highlighting and a copy button. Requires `shiki` as a peer dependency.
+
+```svelte
+<DdiDisplay ddiXml={xmlString} />
+```
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `ddiXml` | `string` | required | DDI XML source |
+| `title` | `string` | `'DDI Codebook'` | Header label |
+| `copyLabel` | `string` | `'Copy'` | Copy button text |
+| `copiedLabel` | `string` | `'Copied!'` | Text after copying |
 
 ### Favicons
 
@@ -228,12 +298,12 @@ You can copy them with a script or reference them directly:
 cp node_modules/@correlaid/cdl-design/dist/favicons/* public/
 ```
 
-Or in an npm script:
+Or automatically after every install via `postinstall` (with a guard for first-install timing):
 
 ```json
 {
   "scripts": {
-    "setup": "cp node_modules/@correlaid/cdl-design/dist/favicons/* public/"
+    "postinstall": "[ -d node_modules/@correlaid/cdl-design/dist/favicons ] && cp node_modules/@correlaid/cdl-design/dist/favicons/* public/ || true"
   }
 }
 ```
