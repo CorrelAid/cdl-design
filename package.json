@@ -1,0 +1,64 @@
+{
+	"name": "@correlaid/cdl-design",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build && npm run package",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync && svelte-package",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"sideEffects": [
+		"**/*.css"
+	],
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		},
+		"./tokens.json": "./dist/tokens/tokens.json",
+		"./tokens.css": "./dist/tokens/tokens.css",
+		"./fonts.css": "./dist/fonts/fonts.css",
+		"./typography.css": "./dist/styles/typography.css",
+		"./vite-plugin": {
+			"types": "./dist/vite-plugin-cdl-tokens.d.ts",
+			"import": "./dist/vite-plugin-cdl-tokens.js"
+		},
+		"./favicons/*": "./dist/favicons/*"
+	},
+	"peerDependencies": {
+		"svelte": "^5.0.0"
+	},
+	"dependencies": {
+		"@sveltejs/kit": "^2.50.2",
+		"@sveltejs/package": "^2.5.7",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@terrazzo/parser": "^0.5.0",
+		"@terrazzo/plugin-css": "^0.5.0",
+		"svelte": "^5.51.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"publint": "^0.3.17",
+		"svelte-check": "^4.4.2"
+	},
+	"keywords": [
+		"svelte",
+		"design-tokens",
+		"component-library",
+		"correlaid",
+		"terrazzo"
+	]
+}

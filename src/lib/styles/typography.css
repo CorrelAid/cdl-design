@@ -1,0 +1,300 @@
+/* ===========================
+   FLUID TYPE ENGINE
+   =========================== */
+
+:root {
+    --fluid-run: calc(var(--fluid-to-screen) - var(--fluid-from-screen));
+    --fluid-from-screen-px: calc(var(--fluid-from-screen) * 1px);
+}
+
+/*
+ * Shared fluid font-size logic.
+ * Each element sets --min-size and --max-size (unitless px numbers
+ * from the generated --font-size-* tokens).
+ */
+h1, h2, h3, h4, h5, h6,
+p, li, td, th,
+small, .caption, .text-small,
+blockquote, .label,
+code, pre, .mono {
+    --rise: calc(var(--max-size) - var(--min-size));
+    --slope: calc(var(--rise) / var(--fluid-run));
+    --min-size-px: calc(var(--min-size) * 1px);
+    --max-size-px: calc(var(--max-size) * 1px);
+    --fluid-size-px: calc(
+        var(--slope) * (100vw - var(--fluid-from-screen-px)) + var(--min-size-px)
+    );
+
+    font-size: clamp(
+        var(--min-size-px),
+        var(--fluid-size-px),
+        var(--max-size-px)
+    );
+}
+
+
+/* ===========================
+   BODY
+   =========================== */
+
+body {
+    --min-size: var(--font-size-body-min);
+    --max-size: var(--font-size-body-max);
+
+    --rise: calc(var(--max-size) - var(--min-size));
+    --slope: calc(var(--rise) / var(--fluid-run));
+    --min-size-px: calc(var(--min-size) * 1px);
+    --max-size-px: calc(var(--max-size) * 1px);
+    --fluid-size-px: calc(
+        var(--slope) * (100vw - var(--fluid-from-screen-px)) + var(--min-size-px)
+    );
+
+    font-size: clamp(
+        var(--min-size-px),
+        var(--fluid-size-px),
+        var(--max-size-px)
+    );
+
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+}
+
+
+/* ===========================
+   HEADINGS
+   =========================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    hyphens: auto;
+}
+
+h1 {
+    --min-size: var(--font-size-h1-min);
+    --max-size: var(--font-size-h1-max);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tighter);
+    margin-bottom: var(--spacing-lg);
+}
+
+h2 {
+    --min-size: var(--font-size-h2-min);
+    --max-size: var(--font-size-h2-max);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-tight);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+h3 {
+    --min-size: var(--font-size-h3-min);
+    --max-size: var(--font-size-h3-max);
+
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-tight);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-base);
+}
+
+h4 {
+    --min-size: var(--font-size-h4-min);
+    --max-size: var(--font-size-h4-max);
+
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+h5, h6 {
+    --min-size: var(--font-size-h4-min);
+    --max-size: var(--font-size-h4-max);
+
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+
+/* ===========================
+   PARAGRAPH
+   =========================== */
+
+p {
+    --min-size: var(--font-size-body-min);
+    --max-size: var(--font-size-body-max);
+
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-bottom: var(--spacing-base);
+    max-width: var(--dimension-content-prose-width);
+}
+
+
+/* ===========================
+   LISTS
+   =========================== */
+
+ul, ol {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+
+    padding-left: var(--indent-list);
+    margin-bottom: var(--spacing-base);
+    max-width: var(--dimension-content-prose-width);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--indent-list-item-gap);
+}
+
+li {
+    --min-size: var(--font-size-list-min);
+    --max-size: var(--font-size-list-max);
+
+    padding-left: var(--indent-list-marker-gap);
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+    padding-left: var(--indent-list-nested);
+    margin-top: var(--indent-list-item-gap);
+    margin-bottom: 0;
+}
+
+
+/* ===========================
+   BLOCKQUOTE
+   =========================== */
+
+blockquote {
+    --min-size: var(--font-size-blockquote-min);
+    --max-size: var(--font-size-blockquote-max);
+
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-normal);
+    font-style: italic;
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+
+    padding-left: var(--indent-blockquote);
+    border-left: var(--dimension-border-width) solid var(--color-secondary);
+    margin-bottom: var(--spacing-lg);
+    max-width: var(--dimension-content-prose-width);
+}
+
+
+/* ===========================
+   SMALL / CAPTION
+   =========================== */
+
+small,
+.text-small {
+    --min-size: var(--font-size-small-min);
+    --max-size: var(--font-size-small-max);
+
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-light);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.caption {
+    --min-size: var(--font-size-caption-min);
+    --max-size: var(--font-size-caption-max);
+
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+
+/* ===========================
+   LABEL
+   =========================== */
+
+.label {
+    --min-size: var(--font-size-label-min);
+    --max-size: var(--font-size-label-max);
+
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+}
+
+
+/* ===========================
+   CODE / MONO
+   =========================== */
+
+code, pre, .mono {
+    --min-size: var(--font-size-mono-min);
+    --max-size: var(--font-size-mono-max);
+
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+}
+
+pre {
+    margin-bottom: var(--spacing-lg);
+    overflow-x: auto;
+}
+
+.mono-strong {
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-bold);
+}
+
+
+/* ===========================
+   TABLES
+   =========================== */
+
+td, th {
+    --min-size: var(--font-size-body-min);
+    --max-size: var(--font-size-body-max);
+
+    padding: var(--dimension-table-padding);
+    line-height: var(--line-height-normal);
+}
+
+th {
+    font-weight: var(--font-weight-semibold);
+}
+
+table {
+    max-width: var(--dimension-table-max-width);
+    border-collapse: collapse;
+}
+
+
+/* ===========================
+   STRONG / EM
+   =========================== */
+
+strong, b {
+    font-weight: var(--font-weight-semibold);
+}
+
+em, i, .txt-italic {
+    font-style: italic;
+}
