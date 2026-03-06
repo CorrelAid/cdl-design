@@ -81,16 +81,99 @@ Import the font-face declarations to register PP Fraktion Sans and PP Fraktion M
 
 For Inter, install `@fontsource-variable/inter` separately since it's available on npm.
 
-### Typography
+### Typography (fluid type system)
 
-Import the full fluid type system (requires tokens CSS to be loaded first):
+The package includes a fluid typography system that scales font sizes smoothly between a minimum and maximum viewport width. It uses CSS `clamp()` driven entirely by design tokens — no media queries needed.
+
+#### How it works
+
+The `tokens.json` defines font sizes as **unitless min/max pairs** (in px):
+
+```json
+"fontSize": {
+  "h1-min": { "$type": "number", "$value": 30 },
+  "h1-max": { "$type": "number", "$value": 40 }
+}
+```
+
+The `fluid` tokens control the viewport range:
+
+```json
+"fluid": {
+  "from-screen": { "$type": "number", "$value": 400 },
+  "to-screen":   { "$type": "number", "$value": 1200 }
+}
+```
+
+The typography CSS then computes a linear interpolation between min and max sizes using `clamp()`:
+
+```
+font-size: clamp(min-size, fluid-size, max-size)
+```
+
+At **400px** viewport, headings/body/etc. use their `*-min` size. At **1200px**, they reach their `*-max` size. In between, they scale linearly.
+
+#### Setup
+
+Import fonts, generated tokens, and the typography stylesheet. Order matters:
 
 ```css
+/* 1. Token-generated CSS custom properties */
+@import './gen_tokens.css';
+
+/* 2. Font faces + fluid typography rules */
 @import '@correlaid/cdl-design/fonts.css';
 @import '@correlaid/cdl-design/typography.css';
 ```
 
-This provides fluid font sizes, heading styles, list styles, blockquote styles, and more — all driven by the design tokens.
+This gives you styled `h1`–`h6`, `p`, `ul`/`ol`/`li`, `blockquote`, `small`, `code`/`pre`, `table`, `strong`/`em`, and utility classes (`.caption`, `.label`, `.text-small`, `.mono`, `.mono-strong`).
+
+#### What's included
+
+| Element / Class | Tokens used | Notes |
+|---|---|---|
+| `body` | `body-min`/`body-max` | Sets base font, line-height, letter-spacing |
+| `h1` | `h1-min`/`h1-max` | PP Fraktion Sans, bold, tight line-height |
+| `h2` | `h2-min`/`h2-max` | Bold, snug line-height |
+| `h3` | `h3-min`/`h3-max` | Bold, snug line-height |
+| `h4`, `h5`, `h6` | `h4-min`/`h4-max` | Semibold |
+| `p` | `body-min`/`body-max` | Max-width: `--dimension-content-prose-width` |
+| `li` | `list-min`/`list-max` | Flex column layout with gap |
+| `blockquote` | `blockquote-min`/`blockquote-max` | Italic, left border |
+| `small`, `.text-small` | `small-min`/`small-max` | PP Fraktion Sans, light weight |
+| `.caption` | `caption-min`/`caption-max` | Wide letter-spacing |
+| `.label` | `label-min`/`label-max` | Uppercase, wider tracking |
+| `code`, `pre`, `.mono` | `mono-min`/`mono-max` | PP Fraktion Mono |
+
+#### Using fluid sizes in custom components
+
+To apply fluid sizing to your own elements, set `--min-size` and `--max-size` and include the element in the fluid selector, or apply the clamp pattern directly:
+
+```css
+.my-element {
+    --min-size: var(--font-size-body-min);
+    --max-size: var(--font-size-body-max);
+
+    --rise: calc(var(--max-size) - var(--min-size));
+    --slope: calc(var(--rise) / var(--fluid-run));
+    --min-size-px: calc(var(--min-size) * 1px);
+    --max-size-px: calc(var(--max-size) * 1px);
+    --fluid-size-px: calc(
+        var(--slope) * (100vw - var(--fluid-from-screen-px)) + var(--min-size-px)
+    );
+
+    font-size: clamp(var(--min-size-px), var(--fluid-size-px), var(--max-size-px));
+}
+```
+
+Or simply set the variables if your element already matches one of the typography selectors (`p`, `li`, `h1`–`h6`, etc.):
+
+```css
+.intro-text {
+    --min-size: var(--font-size-h3-min);
+    --max-size: var(--font-size-h3-max);
+}
+```
 
 ### Components
 
