@@ -1,0 +1,68 @@
+@import '$lib/tokens/tokens.css';
+
+:root {
+    --color-background: var(--color-background-primary);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    color: var(--color-text-primary);
+    background-color: var(--color-background-primary);
+}
+
+.showcase {
+    max-width: var(--dimension-content-max-width);
+    margin: 0 auto;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.showcase section {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.component-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-base);
+    align-items: flex-start;
+}
+
+.color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.swatch {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-lg);
+    border: var(--dimension-border-width) solid var(--color-text-primary);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--spacing-2xs);
+}
+
+.swatch span {
+    font-size: 0.65rem;
+    font-family: var(--font-family-mono);
+    background: rgba(255,255,255,0.85);
+    padding: 1px 4px;
+    border-radius: var(--radius-sm);
+    color: #333;
+}
+
+.token-table {
+    width: 100%;
+    max-width: 600px;
+}
+
+.token-table td:first-child {
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+}

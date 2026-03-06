@@ -19,6 +19,9 @@ Thumbs.db
 !.env.example
 !.env.test
 
+# Generated tokens (rebuilt by Terrazzo on dev/build)
+src/lib/tokens/tokens.css
+
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
