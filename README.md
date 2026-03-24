@@ -1,5 +1,7 @@
 # CDL Design
 
+[![AI-Assisted](https://img.shields.io/badge/AI--assisted-Claude%20Code-blueviolet?logo=anthropic&logoColor=white)](./AI_DISCLOSURE.md)
+
 Shared design tokens, components, fonts, and favicons for CDL projects.
 
 ## Install
